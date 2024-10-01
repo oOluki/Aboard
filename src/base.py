@@ -1,6 +1,7 @@
 import socket
 import threading
 import key_input
+import os
 
 def serve_html(filename):
     # Read the HTML file content
@@ -21,16 +22,15 @@ def init_server(address):
     server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server.bind(address)
     server.listen(1)
+
+    print("Server stablished on " + address[0] + ":" + str(address[1]))
     return server
 
+
 # Server setup
-server = init_server(('10.42.0.1', 8888))
-
-
+server = init_server(('<enter your server address here>'))
 running_server: bool = True
 update_server: bool = True
-
-print("Serving on port 8888...")
 
 def run_server():
     global server, update_server
@@ -39,7 +39,6 @@ def run_server():
         client_socket, client_address = server.accept()
         print(f"Connection from {client_address}")
 
-        # Receive the HTTP request
         data = client_socket.recv(1024).decode('utf-8')
         print(f"client: {data}")
 
@@ -57,8 +56,8 @@ def run_server():
             request_body = data.split('\r\n\r\n')[1]
             key_input.pyautogui.typewrite(request_body)
 
-        response = serve_html('script.html')
-
+        
+        response = serve_html('page.html')
         client_socket.sendall(response)
         
         # Close the connection
@@ -70,7 +69,7 @@ server_process.start()
 
 
 while running_server:
-    if(input("admin: ") == "close"):
+    if(input("admin (enter close and refresh any client to exit): ") == "close"):
         running_server = False
         break
 
@@ -78,3 +77,4 @@ while running_server:
 server.close()
 server_process.join()
 
+#

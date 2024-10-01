@@ -28,12 +28,3 @@ def press_key(key: str):
     else:
         keyboard.press_and_release(key)
 
-
-
-keyboard.press_and_release('a')
-time.sleep(3)
-
-keyboard.press_and_release('shift + -')  # Simulate Shift and Minus keys to get '_'
-keyboard.press_and_release('shift + -')  # Simulate Shift and Minus keys to get '_'
-
-# ldkxkdkd

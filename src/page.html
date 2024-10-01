@@ -105,7 +105,7 @@
             const input = document.getElementById('inputField').value;
             
             // Make an HTTP request to the Python server
-            fetch('http://10.42.0.1:8888/text_input', {
+            fetch('<enter your server address here>/text_input', {
                 method: 'POST',
                 body: input,
                 headers: {
@@ -272,7 +272,7 @@
     <script>
 
         function sendButtonId(button_id){
-            fetch('http://10.42.0.1:8888/button_id', {
+            fetch('<enter your server address here>/button_id', {
                 method: 'POST',
                 body: button_id.toString(),
                 headers: {
@@ -305,4 +305,3 @@
 
 </body>
 </html>
-
