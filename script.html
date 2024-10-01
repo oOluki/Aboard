@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+
+<head>
+
+
+    <title>Keyboard Input</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        .button-column {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;  /* Aligns buttons to the left */
+        }
+        .button-column button {
+            margin-right: 10px;
+            margin-bottom: 10px;  /* Add space between buttons */
+        }
+        .button-column {
+            width: 50px;
+            height: 100px;
+        }
+    </style>
+
+    <style>
+        .keyboard {
+            display: grid;
+            gap: 10px;
+            position: relative; /* Ensure the position stays in place after rotation */
+            transition: transform 0.5s ease-in-out; /* Smooth transition when rotating */
+        }
+
+        /* Horizontal layout */
+        .button-grid-H {
+            grid-template-columns: repeat(14, 100px); /* Define columns */
+        }
+
+        /* Vertical layout */
+        .button-grid-V {
+            grid-template-columns: repeat(14, 100px);
+            transform: rotate(90deg) translateX(800px) translateY(650px); /* Rotate the entire div */
+            transform-origin: top left; /* Ensure the rotation pivot */
+        }
+
+        /* Default style*/
+        .button-row button {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            width: 50px;
+            height: 20px;
+        }
+
+        /* Styles for cellphones */
+        @media only screen and (max-width: 768px) {
+            .keyboard button {
+                width: 60px;
+                height: 30px;
+                font-size: 12px;
+            }
+        }
+
+        /* Even smaller buttons for very small screens (mobile in portrait mode) */
+        @media only screen and (max-width: 480px) {
+            .keyboard button {
+                width: 30px;
+                height: 20px;
+                font-size: 7px;
+            }
+
+            .button-grid-H {
+                grid-template-columns: repeat(14, 25px); /* Define columns */
+            }
+
+            .button-grid-V {
+                grid-template-columns: repeat(14, 25px);
+                transform: rotate(90deg) translateX(125px) translateY(100px); /* Rotate the entire div */
+                transform-origin: top left; /* Ensure the rotation pivot */
+            }
+        }
+
+        #keyboard {
+            transform-origin: center; /* Set rotation pivot to the top left */
+            
+        }
+
+    </style>
+
+
+
+</head>
+
+
+
+<body>
+    <h1>Send Input to PC</h1>
+    <input type="text" id="inputField" placeholder="Send raw text" />
+    <button onclick="sendTextInput()">Send</button>
+
+    <script>
+
+        function sendTextInput() {
+            const input = document.getElementById('inputField').value;
+            
+            // Make an HTTP request to the Python server
+            fetch('http://10.42.0.1:8888/text_input', {
+                method: 'POST',
+                body: input,
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            }).then(response => {
+                console.log("Input sent:", input);
+            }).catch(err => {
+                console.error("Error:", err);
+            });
+        }
+
+        const Buttons = {
+            BUTTON_0: '0',
+            BUTTON_1: '1', 
+            BUTTON_2: '2', 
+            BUTTON_3: '3', 
+            BUTTON_4: '4', 
+            BUTTON_5: '5', 
+            BUTTON_6: '6', 
+            BUTTON_7: '7', 
+            BUTTON_8: '8', 
+            BUTTON_9: '9',
+            BUTTON_SPACE: 'space',
+            BUTTON_A: 'a',
+            BUTTON_B: 'b',
+            BUTTON_C: 'c',
+            BUTTON_D: 'd',
+            BUTTON_E: 'e',
+            BUTTON_F: 'f',
+            BUTTON_G: 'g',
+            BUTTON_H: 'h',
+            BUTTON_I: 'i',
+            BUTTON_J: 'j',
+            BUTTON_K: 'k',
+            BUTTON_L: 'l',
+            BUTTON_M: 'm',
+            BUTTON_N: 'n',
+            BUTTON_O: 'o',
+            BUTTON_P: 'p',
+            BUTTON_Q: 'q',
+            BUTTON_R: 'r',
+            BUTTON_S: 's',
+            BUTTON_T: 't',
+            BUTTON_U: 'u',
+            BUTTON_V: 'v',
+            BUTTON_W: 'w',
+            BUTTON_X: 'x',
+            BUTTON_Y: 'y',
+            BUTTON_Z: 'z',
+            BUTTON_BACKSPACE: 'backspace',
+            BUTTON_ENTER: 'enter',
+            BUTTON_SHIFT: 'shift',
+            BUTTON_CTRL: 'ctrl',
+            BUTTON_TAB: 'tab',
+            BUTTON_CAPSLOCK: 'capslock',
+            BUTTON_ALT: 'alt',
+            BUTTON_FN: '',                        // not implemented...
+            BUTTON_LEFT: 'left',
+            BUTTON_RIGHT: 'right',
+            BUTTON_UP: 'up',
+            BUTTON_DOWN: 'down',
+            BUTTON_ALTGR: '',                       // not implemented ...
+            BUTTON_BSLASH: '\\',
+            BUTTON_SEMICOL: ';',
+            BUTTON_QUOTATION: '\'',
+            BUTTON__: '-',
+            BUTTON_EQ: '=',
+            BUTTON_Á: '`',
+            BUTTON_BRACKET: '[',
+            BUTTON_BACKBRA: ']',
+            BUTTON_Â: '~',
+            BUTTON_COLON: ',',
+            BUTTON_DOT: '.',
+            BUTTON_SLASH: '/',
+            BUTTON_Ç: '',                           // not implemented ...
+            BUTTON_VSLASH: '|',
+        };
+    </script>
+    <h1>Keyboard</h1>
+    <button onclick="toggleLayoutBtn()">Toggle Layout</button>
+    <button onclick="sendButtonId(Buttons.BUTTON_VSLASH)">|</button>
+
+    <div class="keyboard button-grid-H" id="keyboard">
+        <!-- Buttons with unique IDs -->
+        <button onclick="sendButtonId(Buttons.BUTTON_QUOTATION)">'"</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_1)">1!</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_2)">2@</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_3)">3#</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_4)">4$</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_5)">5%</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_6)">6¨</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_7)">7&</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_8)">8*</button> 
+        <button onclick="sendButtonId(Buttons.BUTTON_9)">9(</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_0)">0)</button>
+        <button onclick="sendButtonId(Buttons.BUTTON__)">-_</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_EQ)">=+§</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_BACKSPACE)">BACK</button>
+
+    
+        <button onclick="sendButtonId(Buttons.BUTTON_TAB)">TAB</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_Q)">Q</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_W)">W</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_E)">E</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_R)">R</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_T)">T</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_Y)">Y</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_U)">U</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_I)">I</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_O)">O</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_P)">P</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_Á)">´`</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_BRACKET)">[{ª</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_ENTER)">ENTER</button>
+
+        <button onclick="sendButtonId(Buttons.BUTTON_CAPSLOCK)">CapsLk</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_A)">A</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_S)">S</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_D)">D</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_F)">F</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_G)">G</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_H)">H</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_J)">J</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_K)">K</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_L)">L</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_Ç)">Ç</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_Â)">~^</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_BACKBRA)">]}º</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_ENTER)">ENTER</button>
+
+        <button onclick="sendButtonId(Buttons.BUTTON_SHIFT)">SHIFT</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_BSLASH)">\|</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_Z)">Z</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_X)">X</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_C)">C</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_V)">V</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_B)">B</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_N)">N</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_M)">M</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_COLON)">,</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_DOT)">.</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SEMICOL)">;:</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SHIFT)">SHIFT</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SHIFT)">SHIFT</button>
+        
+        <button onclick="sendButtonId(Buttons.BUTTON_CTRL)">Ctrl</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_FN)">Fn</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_WIN)">WIN</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_ALT)">Alt</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SPACE)">SPACE</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SPACE)">SPACE</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SPACE)">SPACE</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SPACE)">SPACE</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_ALTGR)">AltGr</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_SLASH)">/?°</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_LEFT)">LEFT</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_UP)">UP</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_DOWN)">DOWN</button>
+        <button onclick="sendButtonId(Buttons.BUTTON_RIGHT)">RIGHT</button>
+
+    </div>
+
+    <script>
+
+        function sendButtonId(button_id){
+            fetch('http://10.42.0.1:8888/button_id', {
+                method: 'POST',
+                body: button_id.toString(),
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            }).then(response => {
+                console.log("Button Pressed:", button_id);
+            }).catch(err => {
+                console.error("Error:", err);
+            });
+        }
+        // Get the keyboard and toggle button
+        const keyboard = document.getElementById('keyboard');
+
+        // Initially set to horizontal layout
+        keyboard.classList.add('button-grid-H');
+
+        // Toggle between horizontal and vertical layouts
+        function toggleLayoutBtn() {
+            const keyboard = document.getElementById('keyboard');
+            keyboard.classList.toggle('button-grid-V');
+            keyboard.classList.toggle('button-grid-H');
+        }
+
+
+
+    </script>
+
+    
+
+</body>
+</html>
+
