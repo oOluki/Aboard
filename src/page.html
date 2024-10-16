@@ -177,17 +177,20 @@
             BUTTON_Á: '`',
             BUTTON_BRACKET: '[',
             BUTTON_BACKBRA: ']',
-            BUTTON_Â: '~',
+            BUTTON_Â: '',                           // bugged...
             BUTTON_COLON: ',',
             BUTTON_DOT: '.',
             BUTTON_SLASH: '/',
             BUTTON_Ç: '',                           // not implemented ...
             BUTTON_VSLASH: '|',
+            BUTTON_ESC: 'escape'
         };
     </script>
     <h1>Keyboard</h1>
+    <button onclick="closeServer()">Close</button>
     <button onclick="toggleLayoutBtn()">Toggle Layout</button>
     <button onclick="sendButtonId(Buttons.BUTTON_VSLASH)">|</button>
+    <button onclick="sendButtonId(Buttons.BUTTON_ESC)">Esc</button>
 
     <div class="keyboard button-grid-H" id="keyboard">
         <!-- Buttons with unique IDs -->
@@ -270,6 +273,20 @@
     </div>
 
     <script>
+
+        function closeServer(){
+            fetch('<enter your server address here>/close', {
+                method: 'POST',
+                body: 'close',
+                headers: {
+                    'Content-Type': 'text/plain'
+                }
+            }).then(response => {
+                console.log("Close Request");
+            }).catch(err => {
+                console.error("Error: ", err);
+            });
+        }
 
         function sendButtonId(button_id){
             fetch('<enter your server address here>/button_id', {

@@ -22,7 +22,7 @@ out_file.write(
     in_file.read().replace(
         '<enter your server address here>',
         "http://" + IP_address + ":" + str(PORT),
-        2
+        3
     )
 )
 in_file.close()

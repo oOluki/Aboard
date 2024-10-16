@@ -1,5 +1,4 @@
 import socket
-import threading
 import key_input
 
 def serve_html(filename):
@@ -33,13 +32,25 @@ update_server: bool = True
 
 def run_server():
     global server, update_server
-    while running_server:    
+    
+    accepted_addresses = []
+        
+
+    while running_server:
+
         print("Waiting for connection")
         client_socket, client_address = server.accept()
-        print(f"Connection from {client_address}")
-
+        print(f"Connection request from {client_address}")
         data = client_socket.recv(1024).decode('utf-8')
         print(f"client: {data}")
+        
+        if not (client_address[0] in accepted_addresses):
+            res = input("Accept new connection[Y/N]?\n")
+            if not (res in ['Y', 'y', 'yes', 'Yes']):
+                print("Connection denied")
+                client_socket.close()
+                continue
+            accepted_addresses.append(client_address[0])
 
         if 'POST /button_id' in data:
             
@@ -53,27 +64,18 @@ def run_server():
 
         elif 'POST /text_input' in data:
             request_body = data.split('\r\n\r\n')[1]
-            key_input.pyautogui.typewrite(request_body)
+            key_input.keyboard.write(request_body)
+        elif 'POST /close' in data:
+            client_socket.close()
+            break
+        elif 'GET' in data:
+            response = serve_html('page.html')
+            client_socket.sendall(response)
 
-        
-        response = serve_html('page.html')
-        client_socket.sendall(response)
-        
-        # Close the connection
         client_socket.close()
 
-
-server_process = threading.Thread(target=run_server)
-server_process.start()
-
-
-while running_server:
-    if(input("admin (enter close and refresh any client to exit): ") == "close"):
-        running_server = False
-        break
-
+run_server()
 
 server.close()
-server_process.join()
 
-#
+# 
