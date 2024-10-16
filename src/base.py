@@ -1,7 +1,6 @@
 import socket
 import threading
 import key_input
-import os
 
 def serve_html(filename):
     # Read the HTML file content

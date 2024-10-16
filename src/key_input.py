@@ -1,6 +1,4 @@
 import keyboard
-import pyautogui
-import time
 
 caps_lock: bool = False
 shift: bool = False
