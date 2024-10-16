@@ -1,6 +1,7 @@
-import keyboard
-import pyautogui
-import time
+from pynput.keyboard import Controller
+from buttons import buttons
+
+keyboard = Controller()
 
 caps_lock: bool = False
 shift: bool = False
@@ -10,21 +11,31 @@ ctrl: bool = False
 
 
 def press_key(key: str):
-    if key == 'shift':
-        if keyboard.is_pressed('shift'):
-            keyboard.release('shift')
-        else:
-            keyboard.press('shift')
-    elif key == 'alt':
-        if keyboard.is_pressed('alt'):
-            keyboard.release('alt')
-        else:
-            keyboard.press('alt')
-    elif key == 'ctrl':
-        if keyboard.is_pressed('ctrl'):
-            keyboard.release('ctrl')
-        else:
-            keyboard.press('ctrl')
-    else:
-        keyboard.press_and_release(key)
+    match key:
+        case 'shift':
+            if keyboard.shift_pressed:
+                keyboard.release(keyboard._Key.shift)
+            else:
+                keyboard.press(keyboard._Key.shift)
+        case 'alt':
+            if keyboard.alt_pressed:
+                keyboard.release(keyboard._Key.alt)
+            else:
+                keyboard.press(keyboard._Key.alt)
+        case 'altgr':
+            if keyboard.alt_gr_pressed:
+                keyboard.release(keyboard._Key.alt_gr)
+            else:
+                keyboard.press(keyboard._Key.alt_gr)
+        case 'ctrl':
+            if keyboard.ctrl_pressed:
+                keyboard.release(keyboard._Key.ctrl)
+            else:
+                keyboard.press(keyboard._Key.ctrl)
+        case _:
+            keyboard.press(buttons[key])
+            keyboard.release(buttons[key])
 
+
+def write(text: str):
+    keyboard.type(text)

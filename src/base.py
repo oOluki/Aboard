@@ -1,7 +1,6 @@
 import socket
 import threading
 import key_input
-import os
 
 def serve_html(filename):
     # Read the HTML file content
@@ -54,7 +53,7 @@ def run_server():
 
         elif 'POST /text_input' in data:
             request_body = data.split('\r\n\r\n')[1]
-            key_input.pyautogui.typewrite(request_body)
+            key_input.write(request_body)
 
         
         response = serve_html('page.html')
